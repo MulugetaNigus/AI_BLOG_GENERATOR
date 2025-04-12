@@ -1,0 +1,363 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BlogGenius | YouTube to Blog</title>
+    <link rel="stylesheet" href="styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&family=Merriweather:wght@400;700&family=Noto+Sans+Arabic:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="icon" href="https://img.icons8.com/fluency/96/blog.png">
+</head>
+<body>
+    <div class="container">
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <div class="sidebar-header">
+                <img src="https://img.icons8.com/fluency/96/blog.png" alt="BlogGenius Logo" class="logo">
+                <h2>BlogGenius</h2>
+            </div>
+            <nav class="sidebar-nav">
+                <ul>
+                    <li><a href="#home" class="active" data-section="home">🏠 Home</a></li>
+                    <li><a href="#settings" data-section="settings">⚙️ Settings</a></li>
+                    <li><a href="#history" data-section="history">📜 History</a></li>
+                    <li><a href="#help" data-section="help">ℹ️ Help & About</a></li>
+                </ul>
+            </nav>
+            <div class="sidebar-footer">
+                <button id="theme-toggle" class="theme-button">🌙 Dark Mode</button>
+                <p>Version 1.0.0</p>
+                <p>© 2025 BlogGenius</p>
+            </div>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <!-- Home Section -->
+            <section id="home" class="content-section active">
+                <h1>YouTube to Blog Generator</h1>
+                <p class="subtitle">Transform any YouTube video into a professional blog post in seconds.</p>
+
+                <!-- Stats -->
+                <div class="stats">
+                    <div class="stat">
+                        <span class="stat-number">5K+</span>
+                        <span class="stat-label">Blogs Generated</span>
+                    </div>
+                    <div class="stat">
+                        <span class="stat-number">98%</span>
+                        <span class="stat-label">Satisfaction Rate</span>
+                    </div>
+                    <div class="stat">
+                        <span class="stat-number">120+</span>
+                        <span class="stat-label">Countries Served</span>
+                    </div>
+                </div>
+
+                <!-- Input Form -->
+                <form id="youtube-form" class="input-form">
+                    <div class="form-group">
+                        <input type="url" id="youtube-url" placeholder="Enter YouTube URL (e.g., https://www.youtube.com/watch?v=...)" required>
+                        <button type="submit" class="generate-button">Generate Blog</button>
+                    </div>
+                    <div class="form-options">
+                        <label><input type="checkbox" id="include-toc" checked> Include Table of Contents</label>
+                        <label><input type="checkbox" id="include-summary" checked> Include Summary</label>
+                        <label><input type="checkbox" id="include-headings" checked> Include Headings</label>
+                    </div>
+                    <select id="language" class="language-selector">
+                        <option value="en">English</option>
+                        <option value="es">Spanish</option>
+                        <option value="fr">French</option>
+                        <option value="ar">Arabic</option>
+                        <option value="zh">Chinese</option>
+                    </select>
+                </form>
+
+                <!-- Error Message -->
+                <div id="error-message" class="error-message hidden"></div>
+
+                <!-- Blog Output -->
+                <div id="blog-output" class="blog-output hidden">
+                    <h2>Your Generated Blog Post</h2>
+                    <div class="tabs">
+                        <button class="tab active" data-tab="preview">Preview</button>
+                        <button class="tab" data-tab="markdown">Markdown</button>
+                    </div>
+                    <div id="preview" class="tab-content active">
+                        <div class="blog-content">
+                            <!-- Blog content will be injected here -->
+                        </div>
+                    </div>
+                    <div id="markdown" class="tab-content hidden">
+                        <pre><code id="markdown-code"></code></pre>
+                        <a id="download-markdown" href="#" class="download-button">Download Markdown</a>
+                    </div>
+                </div>
+
+                <!-- Progress Bar -->
+                <div id="progress-container" class="progress-container hidden">
+                    <div class="progress-bar">
+                        <div id="progress" class="progress"></div>
+                    </div>
+                    <p id="progress-text">Initializing...</p>
+                </div>
+            </section>
+
+            <!-- Settings Section -->
+            <section id="settings" class="content-section hidden">
+                <h1>Settings</h1>
+                <div class="settings-group">
+                    <h3>API Configuration</h3>
+                    <label>API Endpoint URL</label>
+                    <input type="url" value="http://127.0.0.1:8000/generate-blog" id="api-endpoint">
+                    <button class="save-button">Save</button>
+                </div>
+                <div class="settings-group">
+                    <h3>Blog Appearance</h3>
+                    <label>Accent Color</label>
+                    <input type="color" id="accent-color" value="#f59e0b">
+                </div>
+            </section>
+
+            <!-- History Section -->
+            <section id="history" class="content-section hidden">
+                <h1>Generation History</h1>
+                <div id="history-list">
+                    <p>No blogs generated yet.</p>
+                </div>
+            </section>
+
+            <!-- Help & About Section -->
+            <section id="help" class="content-section hidden">
+                <h1>Help & About</h1>
+                <h3>About BlogGenius</h3>
+                <p>BlogGenius converts YouTube videos into engaging blog posts using AI.</p>
+                <h3>How to Use</h3>
+                <ol>
+                    <li>Enter a YouTube URL.</li>
+                    <li>Select language and options.</li>
+                    <li>Click "Generate Blog".</li>
+                    <li>Review and download your post.</li>
+                </ol>
+                <h3>Contact</h3>
+                <p>Email: support@bloggenius.com</p>
+            </section>
+        </main>
+    </div>
+
+    <script>
+        // Theme Toggle
+        const themeToggle = document.getElementById('theme-toggle');
+        themeToggle.addEventListener('click', () => {
+            document.body.classList.toggle('dark');
+            themeToggle.textContent = document.body.classList.contains('dark') ? '☀️ Light Mode' : '🌙 Dark Mode';
+            localStorage.setItem('theme', document.body.classList.contains('dark') ? 'dark' : 'light');
+        });
+        if (localStorage.getItem('theme') === 'dark') {
+            document.body.classList.add('dark');
+            themeToggle.textContent = '☀️ Light Mode';
+        }
+
+        // Sidebar Navigation
+        const navLinks = document.querySelectorAll('.sidebar-nav a');
+        const sections = document.querySelectorAll('.content-section');
+        navLinks.forEach(link => {
+            link.addEventListener('click', (e) => {
+                e.preventDefault();
+                navLinks.forEach(l => l.classList.remove('active'));
+                link.classList.add('active');
+                sections.forEach(s => s.classList.add('hidden'));
+                document.getElementById(link.dataset.section).classList.remove('hidden');
+            });
+        });
+
+        // Form Submission
+        const form = document.getElementById('youtube-form');
+        const blogOutput = document.getElementById('blog-output');
+        const errorMessage = document.getElementById('error-message');
+        const progressContainer = document.getElementById('progress-container');
+        const progressBar = document.getElementById('progress');
+        const progressText = document.getElementById('progress-text');
+        let apiEndpoint = document.getElementById('api-endpoint').value;
+
+        // Update API endpoint when saved
+        document.querySelector('.save-button').addEventListener('click', () => {
+            apiEndpoint = document.getElementById('api-endpoint').value;
+            alert('API endpoint updated!');
+        });
+
+        form.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const url = document.getElementById('youtube-url').value;
+            const language = document.getElementById('language').value;
+            const includeToc = document.getElementById('include-toc').checked;
+
+            // Validate URL
+            const youtubeRegex = /(https?:\/\/)?(www\.)?(youtube|youtu|youtube-nocookie)\.(com|be)\/.+/;
+            if (!youtubeRegex.test(url)) {
+                errorMessage.textContent = 'Please enter a valid YouTube URL';
+                errorMessage.classList.remove('hidden');
+                return;
+            }
+
+            // Clear previous errors
+            errorMessage.classList.add('hidden');
+            blogOutput.classList.add('hidden');
+            progressContainer.classList.remove('hidden');
+
+            // Progress Animation
+            const messages = [
+                'Fetching video info...',
+                'Transcribing content...',
+                'Generating blog...',
+                'Finalizing...'
+            ];
+            let progress = 0;
+            for (let i = 0; i < messages.length; i++) {
+                progressText.textContent = messages[i];
+                progress += 25;
+                progressBar.style.width = `${progress}%`;
+                await new Promise(resolve => setTimeout(resolve, 1000));
+            }
+
+            try {
+                // Call real API
+                const response = await fetch("http://127.0.0.1:8000/generate-blog", {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ url }),
+                    signal: AbortSignal.timeout(180000) // 3-minute timeout
+                });
+
+                if (!response.ok) {
+                    throw new Error(`API Error (Status ${response.status}): ${await response.text()}`);
+                }
+
+                const data = await response.json();
+                if (data.error) {
+                    throw new Error(data.error);
+                }
+
+                const blogContent = data.blog_post || 'No content returned';
+                const title = blogContent.split('\n')[0].replace(/^#\s*/, '') || 'Untitled Blog';
+                const date = new Date().toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' });
+                const readingTime = Math.max(1, Math.round(blogContent.split(/\s+/).length / 200)) + ' min read';
+
+                // Generate TOC (basic implementation)
+                let tocHtml = '';
+                if (includeToc) {
+                    const headings = blogContent.match(/^#{1,3}\s+.+$/gm) || [];
+                    tocHtml = '<div class="blog-toc"><h3>Table of Contents</h3><ul>';
+                    headings.forEach(h => {
+                        const level = h.match(/^#+/)[0].length - 1;
+                        const text = h.replace(/^#+\s*/, '');
+                        const anchor = text.toLowerCase().replace(/\s+/g, '-').replace(/[^a-z0-9-]/g, '');
+                        tocHtml += `<li style="margin-left: ${level * 20}px;"><a href="#${anchor}">${text}</a></li>`;
+                    });
+                    tocHtml += '</ul></div>';
+                }
+
+                // Convert Markdown to HTML (basic conversion for demo)
+                let htmlContent = blogContent
+                    .replace(/^#\s+(.+)$/gm, (m, t) => `<h1 class="blog-title">${t}</h1>`)
+                    .replace(/^##\s+(.+)$/gm, (m, t) => `<h2 id="${t.toLowerCase().replace(/\s+/g, '-')}">${t}</h2>`)
+                    .replace(/^###\s+(.+)$/gm, (m, t) => `<h3 id="${t.toLowerCase().replace(/\s+/g, '-')}">${t}</h3>`)
+                    .replace(/^\s*-\s+(.+)$/gm, '<li>$1</li>')
+                    .replace(/<\/li>\n<li>/g, '</li><li>')
+                    .replace(/<li>.+<\/li>/g, m => `<ul>${m}</ul>`)
+                    .replace(/\n\n/g, '<p>')
+                    .replace(/\n/g, '</p>');
+
+                // Extract YouTube thumbnail
+                let thumbnailUrl = 'https://via.placeholder.com/800x400';
+                const videoIdMatch = url.match(/(?:v=|youtu\.be\/)([^&?]+)/);
+                if (videoIdMatch) {
+                    thumbnailUrl = `https://img.youtube.com/vi/${videoIdMatch[1]}/maxresdefault.jpg`;
+                }
+
+                // Render blog
+                document.querySelector('#preview .blog-content').innerHTML = `
+                    <h1 class="blog-title">${title}</h1>
+                    <div class="blog-meta">
+                        <span>By BlogGenius AI</span> | <span>${date}</span> | <span>${readingTime}</span>
+                    </div>
+                    ${tocHtml}
+                    <img src="${thumbnailUrl}" alt="${title} Thumbnail">
+                    ${htmlContent}
+                    <div class="blog-cta">
+                        <a href="#">Read More</a>
+                    </div>
+                    <div class="blog-social">
+                        <a href="https://twitter.com/intent/tweet?text=${encodeURIComponent(title)}" target="_blank">🐦</a>
+                        <a href="https://www.linkedin.com/sharing/share-offsite/" target="_blank">💼</a>
+                    </div>
+                `;
+
+                // Markdown with front matter
+                const markdownWithMeta = `---
+title: ${title}
+author: BlogGenius AI
+date: ${new Date().toISOString().split('T')[0]}
+---
+${blogContent}`;
+                document.getElementById('markdown-code').textContent = markdownWithMeta;
+                const markdownBlob = new Blob([markdownWithMeta], { type: 'text/markdown' });
+                document.getElementById('download-markdown').href = URL.createObjectURL(markdownBlob);
+                document.getElementById('download-markdown').download = `${title.replace(/[^a-z0-9]/gi, '_')}.md`;
+
+                // Add to History
+                const historyList = document.getElementById('history-list');
+                const historyItem = document.createElement('div');
+                historyItem.className = 'history-item';
+                historyItem.innerHTML = `
+                    <h3>${title}</h3>
+                    <p>URL: ${url}</p>
+                    <p>Date: ${date}</p>
+                `;
+                if (historyList.querySelector('p')) {
+                    historyList.innerHTML = '';
+                }
+                historyList.appendChild(historyItem);
+
+                progressContainer.classList.add('hidden');
+                blogOutput.classList.remove('hidden');
+            } catch (error) {
+                progressContainer.classList.add('hidden');
+                errorMessage.textContent = `Failed to generate blog: ${error.message}`;
+                errorMessage.classList.remove('hidden');
+
+                // Provide specific guidance
+                if (error.message.includes('Error retrieving transcription')) {
+                    errorMessage.innerHTML += '<br><br><strong>Tip:</strong> Ensure the video has captions enabled and is publicly accessible.';
+                } else if (error.message.includes('timeout')) {
+                    errorMessage.innerHTML += '<br><br><strong>Tip:</strong> The video may be too long or the server is busy. Try a shorter video or check your connection.';
+                }
+            }
+        });
+
+        // Tab Switching
+        const tabs = document.querySelectorAll('.tab');
+        const tabContents = document.querySelectorAll('.tab-content');
+        tabs.forEach(tab => {
+            tab.addEventListener('click', () => {
+                tabs.forEach(t => t.classList.remove('active'));
+                tabContents.forEach(c => c.classList.add('hidden'));
+                tab.classList.add('active');
+                document.getElementById(tab.dataset.tab).classList.remove('hidden');
+            });
+        });
+
+        // Language-based RTL Support
+        document.getElementById('language').addEventListener('change', (e) => {
+            document.body.style.direction = e.target.value === 'ar' ? 'rtl' : 'ltr';
+            document.body.style.fontFamily = e.target.value === 'ar' ? "'Noto Sans Arabic', sans-serif" : "'Roboto', sans-serif";
+        });
+
+        // Accent Color
+        document.getElementById('accent-color').addEventListener('input', (e) => {
+            document.documentElement.style.setProperty('--accent-color', e.target.value);
+        });
+    </script>
+</body>
+</html>

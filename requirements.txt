@@ -1,0 +1,12 @@
+fastapi
+uvicorn
+pydantic
+python-multipart
+streamlit>=1.26.0
+requests
+pillow
+agno
+
+# The extras are not needed with the exact implementation
+# youtube-transcript-api>=0.6.1
+# pytube>=12.1.3 
